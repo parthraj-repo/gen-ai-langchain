@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 llm=HuggingFaceEndpoint(
-    repo_id="",
+    repo_id="", # model name
     task="text-generation"
 )
 
