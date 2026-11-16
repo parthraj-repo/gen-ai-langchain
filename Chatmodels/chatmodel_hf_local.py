@@ -13,7 +13,7 @@ llm=HuggingFacePipeline.from_model_id(
 
 )
 
-model=ChatHuggingFace(llm)
+model=ChatHuggingFace(llm=llm)
 
 result=model.invoke("question/prompt")
 
