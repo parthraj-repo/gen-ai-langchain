@@ -1,35 +1,30 @@
-from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
-from dotenv import load_dotenv
-from langchain_core.output_parsers import StrOutputParser
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import PromptTemplate
+from langchain_core.output_parsers import StrOutputParser
 
+# Step 1: Create string output parser
+parser = StrOutputParser()
 
-load_dotenv()
-llm = HuggingFaceEndpoint(
-    repo_id="HuggingFaceTB/SmolLM2-1.7B-Instruct",
-    task="text-generation",
-    max_new_tokens=150,
-    temperature=0.7)
-
-model=ChatHuggingFace(llm)
-
-# 1st temlate ----> detailed report
-
-template1=PromptTemplate(
-    template='write a detailed report on {topic}',
-    input_variables=['topic']
-
+# Step 2: Create prompt template
+template = PromptTemplate(
+    template="Explain {topic} in simple words.",
+    input_variables=["topic"]
 )
 
-# 2nd template -----> summary
-
-template2=PromptTemplate(
-    template='give me 5 line summary on following text. /n {text}'
+# Step 3: Initialize model
+model = ChatGoogleGenerativeAI(
+    model="gemini-2.5-flash",
+    google_api_key="YOUR_API_KEY"
 )
 
-parsar=StrOutputParser()
+# Step 4: Format prompt
+final_prompt = template.format(topic="Machine Learning")
 
-chain = template1 | model | parsar | template2 | model | parsar
+# Step 5: Invoke model
+response = model.invoke(final_prompt)
 
-result=chain.invoke({'topic': 'black hole'})
+# Step 6: Parse output
+result = parser.parse(response.content)
+
 print(result)
+print(type(result))

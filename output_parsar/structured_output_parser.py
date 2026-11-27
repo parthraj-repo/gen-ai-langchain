@@ -20,8 +20,16 @@ schema=[
 parser=StructuredOutputParser.from_response_schemas(schema)
 
 template=PromptTemplate(
-    template=' give 3 facts about {topic}\n {format_instruction}'
+    template=' give 3 facts about {topic}\n {format_instruction}',
     input_variables=['topic'],
-    partial_variables={'format_instruction': parser.get}
+    partial_variables={
+        'format_instruction': parser.get_format_instructions()}
 
 )
+
+prompt=template.invoke({'topic':'black hole'})
+result=model.invoke(prompt)
+final_result=parser.parse(result.content) # CHAIN -> chain = template | model | perser ,,then chain.invoke()
+
+print(final_result)
+
