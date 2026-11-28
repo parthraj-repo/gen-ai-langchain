@@ -10,8 +10,8 @@ llm=HuggingFaceEndpoint(repo_id='', task='' )
 
 model=ChatHuggingFace(llm)
 
-prompt=PromptTemplate(
-    template='generate 5 interseting facts about {topic}'
+prompt= PromptTemplate(
+    template='generate 5 interseting facts about {topic}',
     input_variables=['topic']
 )
 
